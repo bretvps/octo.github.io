@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fullscreen Auto Image Slider</title>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    background:#000;
+}
+
+/* =========================
+   SLIDER
+========================= */
+
+.slider{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* =========================
+   SLIDES WRAPPER
+========================= */
+
+.slides{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition:transform 0.8s ease-in-out;
+}
+
+/* =========================
+   SINGLE SLIDE
+========================= */
+
+.slide{
+    min-width:100%;
+    height:100%;
+    position:relative;
+}
+
+/* =========================
+   IMAGE
+========================= */
+
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+}
+
+/* =========================
+   DARK OVERLAY
+========================= */
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,0.7),
+        rgba(0,0,0,0.2)
+    );
+}
+
+/* =========================
+   TEXT CAPTION
+========================= */
+
+.caption{
+    position:absolute;
+    left:5%;
+    bottom:10%;
+    color:#fff;
+    z-index:5;
+    max-width:700px;
+}
+
+.caption h2{
+    font-size:clamp(2rem, 5vw, 4.5rem);
+    margin-bottom:10px;
+}
+
+.caption p{
+    font-size:clamp(1rem, 2vw, 1.3rem);
+    line-height:1.5;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(8px);
+    color:#fff;
+    font-size:2rem;
+    cursor:pointer;
+    z-index:20;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#fff;
+    color:#000;
+}
+
+.prev{
+    left:20px;
+}
+
+.next{
+    right:20px;
+}
+
+/* =========================
+   DOTS
+========================= */
+
+.dots{
+    position:absolute;
+    bottom:25px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    z-index:20;
+}
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.4);
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.dot.active{
+    background:#fff;
+    transform:scale(1.3);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+    .btn{
+        width:45px;
+        height:45px;
+        font-size:1.4rem;
+    }
+
+    .caption{
+        max-width:90%;
+    }
+
+    .dot{
+        width:10px;
+        height:10px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="slider" id="slider">
+
+    <!-- PREV BUTTON -->
+    <button class="btn prev">&#10094;</button>
+
+    <!-- NEXT BUTTON -->
+    <button class="btn next">&#10095;</button>
+
+    <!-- SLIDES -->
+    <div class="slides" id="slides">
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920" alt="">
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>Mountain Escape</h2>
+                <p>Beautiful cinematic mountain scenery.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920" alt="">
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>Forest Adventure</h2>
+                <p>Fresh green forest environment.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920" alt="">
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>Ocean Breeze</h2>
+                <p>Relaxing beach and calm ocean waves.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=1920" alt="">
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>City Lights</h2>
+                <p>Modern city skyline glowing at night.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920" alt="">
+            <div class="overlay"></div>
+            <div class="caption">
+                <h2>Golden Sunset</h2>
+                <p>Warm sunset atmosphere.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DOTS -->
+    <div class="dots" id="dots"></div>
+
+</div>
+
+<script>
+
+/* =========================
+   SELECT ELEMENTS
+========================= */
+
+const slides = document.getElementById('slides');
+const slide = document.querySelectorAll('.slide');
+const prevBtn = document.querySelector('.prev');
+const nextBtn = document.querySelector('.next');
+const dotsContainer = document.getElementById('dots');
+const slider = document.getElementById('slider');
+
+let index = 0;
+let autoSlide;
+
+const totalSlides = slide.length;
+
+/* =========================
+   CREATE DOTS
+========================= */
+
+for(let i = 0; i < totalSlides; i++){
+
+    const dot = document.createElement('div');
+
+    dot.classList.add('dot');
+
+    if(i === 0){
+        dot.classList.add('active');
+    }
+
+    dot.addEventListener('click', () => {
+
+        index = i;
+
+        updateSlider();
+
+        restartAutoSlide();
+    });
+
+    dotsContainer.appendChild(dot);
+}
+
+const dots = document.querySelectorAll('.dot');
+
+/* =========================
+   UPDATE SLIDER
+========================= */
+
+function updateSlider(){
+
+    slides.style.transform = `translateX(-${index * 100}%)`;
+
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    dots[index].classList.add('active');
+}
+
+/* =========================
+   NEXT SLIDE
+========================= */
+
+function nextSlide(){
+
+    index++;
+
+    if(index >= totalSlides){
+        index = 0;
+    }
+
+    updateSlider();
+}
+
+/* =========================
+   PREVIOUS SLIDE
+========================= */
+
+function prevSlide(){
+
+    index--;
+
+    if(index < 0){
+        index = totalSlides - 1;
+    }
+
+    updateSlider();
+}
+
+/* =========================
+   BUTTON EVENTS
+========================= */
+
+nextBtn.addEventListener('click', () => {
+
+    nextSlide();
+
+    restartAutoSlide();
+});
+
+prevBtn.addEventListener('click', () => {
+
+    prevSlide();
+
+    restartAutoSlide();
+});
+
+/* =========================
+   AUTO SLIDE
+========================= */
+
+function startAutoSlide(){
+
+    autoSlide = setInterval(() => {
+
+        nextSlide();
+
+    }, 10000); // 10 seconds
+}
+
+function stopAutoSlide(){
+
+    clearInterval(autoSlide);
+}
+
+function restartAutoSlide(){
+
+    stopAutoSlide();
+
+    startAutoSlide();
+}
+
+/* Start slider */
+startAutoSlide();
+
+/* =========================
+   PAUSE ON HOVER
+========================= */
+
+slider.addEventListener('mouseenter', () => {
+
+    stopAutoSlide();
+});
+
+slider.addEventListener('mouseleave', () => {
+
+    startAutoSlide();
+});
+
+/* =========================
+   TOUCH SUPPORT
+========================= */
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+slider.addEventListener('touchstart', e => {
+
+    touchStartX = e.changedTouches[0].screenX;
+
+    stopAutoSlide();
+});
+
+slider.addEventListener('touchend', e => {
+
+    touchEndX = e.changedTouches[0].screenX;
+
+    handleSwipe();
+
+    startAutoSlide();
+});
+
+/* =========================
+   HANDLE SWIPE
+========================= */
+
+function handleSwipe(){
+
+    if(touchStartX - touchEndX > 50){
+
+        nextSlide();
+    }
+
+    if(touchEndX - touchStartX > 50){
+
+        prevSlide();
+    }
+}
+
+</script>
+
+</body>
+</html>
