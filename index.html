@@ -3,449 +3,417 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fullscreen Auto Image Slider</title>
+<title>Premium Cinematic Image Slider</title>
 
 <style>
-
 /* =========================
-   RESET
+   RESET & BASE STYLES
 ========================= */
-
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:Arial, sans-serif;
-    background:#000;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #000;
 }
 
 /* =========================
-   SLIDER
+   SLIDER CONTAINER
 ========================= */
-
 .slider{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* =========================
-   SLIDES WRAPPER
+   SLIDES TRACK
 ========================= */
-
 .slides{
-    display:flex;
-    width:100%;
-    height:100%;
-    transition:transform 0.8s ease-in-out;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.9s cubic-bezier(0.7, 0, 0.3, 1); /* Ultra-smooth pacing */
 }
 
 /* =========================
    SINGLE SLIDE
 ========================= */
-
 .slide{
-    min-width:100%;
-    height:100%;
-    position:relative;
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 /* =========================
-   IMAGE
+   KEN BURNS ZOOM EFFECT
 ========================= */
-
 .slide img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
-    display:block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transform: scale(1);
+    transition: transform 10s ease-out; /* Slow visual build */
+}
+
+/* Triggers subtle background zoom only on active slide */
+.slide.active img {
+    transform: scale(1.08);
 }
 
 /* =========================
-   DARK OVERLAY
+   CINEMATIC CAPTIONS
 ========================= */
-
-.overlay{
-    position:absolute;
-    inset:0;
-    background:linear-gradient(
-        to top,
-        rgba(0,0,0,0.7),
-        rgba(0,0,0,0.2)
-    );
-}
-
-/* =========================
-   TEXT CAPTION
-========================= */
-
 .caption{
-    position:absolute;
-    left:5%;
-    bottom:10%;
-    color:#fff;
-    z-index:5;
-    max-width:700px;
+    position: absolute;
+    left: 8%;
+    bottom: 12%;
+    color: #fff;
+    z-index: 5;
+    max-width: 700px;
+}
+
+/* Text elements hide out of view first */
+.caption h2, .caption p{
+    opacity: 0;
+    transform: translateY(30px);
+    transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.8s ease;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5); /* Replaces overlay for crisp readability */
 }
 
 .caption h2{
-    font-size:clamp(2rem, 5vw, 4.5rem);
-    margin-bottom:10px;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
 }
 
-.caption p{
-    font-size:clamp(1rem, 2vw, 1.3rem);
-    line-height:1.5;
+/* Stagger animation delays for elements sliding up */
+.slide.active .caption h2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.4s;
 }
 
 /* =========================
-   BUTTONS
+   MINIMALIST NAVIGATION BUTTONS
 ========================= */
-
 .btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:60px;
-    height:60px;
-    border:none;
-    border-radius:50%;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(8px);
-    color:#fff;
-    font-size:2rem;
-    cursor:pointer;
-    z-index:20;
-    transition:0.3s;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55px;
+    height: 55px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn:hover{
-    background:#fff;
-    color:#000;
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    transform: translateY(-50%) scale(1.05);
 }
 
-.prev{
-    left:20px;
-}
-
-.next{
-    right:20px;
-}
+.prev{ left: 30px; }
+.next{ right: 30px; }
 
 /* =========================
-   DOTS
+   SMOOTH LIQUID DOTS
 ========================= */
-
 .dots{
-    position:absolute;
-    bottom:25px;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:12px;
-    z-index:20;
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 20;
 }
 
 .dot{
-    width:14px;
-    height:14px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.4);
-    cursor:pointer;
-    transition:0.3s;
+    width: 10px;
+    height: 10px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
 }
 
+/* Modern Pill stretch instead of basic scale */
 .dot.active{
-    background:#fff;
-    transform:scale(1.3);
+    background: #fff;
+    width: 30px; 
 }
 
 /* =========================
-   MOBILE
+   RESPONSIVE DESIGN
 ========================= */
-
-@media(max-width:768px){
-
+@media(max-width: 768px){
     .btn{
-        width:45px;
-        height:45px;
-        font-size:1.4rem;
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
     }
-
-    .caption{
-        max-width:90%;
-    }
-
-    .dot{
-        width:10px;
-        height:10px;
-    }
+    .prev{ left: 15px; }
+    .next{ right: 15px; }
+    .caption{ left: 5%; bottom: 15%; max-width: 90%; }
+    .dots{ bottom: 25px; }
 }
-
 </style>
 </head>
 <body>
 
 <div class="slider" id="slider">
 
-    <!-- PREV BUTTON -->
-    <button class="btn prev">&#10094;</button>
+    <!-- NAVIGATION BUTTONS -->
+    <button class="btn prev" aria-label="Previous Slide">&#10094;</button>
+    <button class="btn next" aria-label="Next Slide">&#10095;</button>
 
-    <!-- NEXT BUTTON -->
-    <button class="btn next">&#10095;</button>
-
-    <!-- SLIDES -->
+    <!-- SLIDES TRACK -->
     <div class="slides" id="slides">
 
-        <div class="slide">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920" alt="">
-            <div class="overlay"></div>
+        <div class="slide active">
+            <img src="https://i.ibb.co/RpWHBJKT/48fa36da56bdb09699c00fa629ccb890-uncropped-scaled-within-1536-1152.webp" alt="Sitting Area 1">
             <div class="caption">
-                <h2>Mountain Escape</h2>
-                <p>Beautiful cinematic mountain scenery.</p>
+                <h2>Sitting Area</h2>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920" alt="">
-            <div class="overlay"></div>
+            <img src="https://i.ibb.co/bjb2gJfJ/d873decbc28c5d884799934fc65e354c-uncropped-scaled-within-1536-1152.webp" alt="Sitting Area 2">
             <div class="caption">
-                <h2>Forest Adventure</h2>
-                <p>Fresh green forest environment.</p>
+                <h2>Sitting Area</h2>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1920" alt="">
-            <div class="overlay"></div>
+            <img src="https://i.ibb.co/q3BpVRMT/eeaea64777859fa41530fac5c73f2069-uncropped-scaled-within-1536-1152.webp" alt="Kitchen 1">
             <div class="caption">
-                <h2>Ocean Breeze</h2>
-                <p>Relaxing beach and calm ocean waves.</p>
+                <h2>Kitchen</h2>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?q=80&w=1920" alt="">
-            <div class="overlay"></div>
+            <img src="https://i.ibb.co/KcGR3hNc/7ae96b897abf0deae6b4384d03aa867c-uncropped-scaled-within-1536-1152.webp" alt="Kitchen 2">
             <div class="caption">
-                <h2>City Lights</h2>
-                <p>Modern city skyline glowing at night.</p>
+                <h2>Kitchen</h2>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920" alt="">
-            <div class="overlay"></div>
+            <img src="https://i.ibb.co/7JRwtm1m/908d41a372a2d88a40db844bb87b2a1c-uncropped-scaled-within-1536-1152.webp" alt="Dining Room">
             <div class="caption">
-                <h2>Golden Sunset</h2>
-                <p>Warm sunset atmosphere.</p>
+                <h2>Dining Room</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/xK9rSq3p/0088695293d18e3cb40c1a14dce1cc98-uncropped-scaled-within-1536-1152.webp" alt="Master Bedroom 1">
+            <div class="caption">
+                <h2>Master Bed</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/8LsSh43x/4fe0193f9b9c87b937c3ef8ac8ca6894-uncropped-scaled-within-1536-1152.webp" alt="Master Bedroom 2">
+            <div class="caption">
+                <h2>Master Bedroom</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/7xr583MM/0f4f2a7922a7035e7b205e16326421c4-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 1">
+            <div class="caption">
+                <h2>Bedroom 1</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/SwF5Wnfk/25d24b7d9e2557ddcab96d79c4752ed1-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 2">
+            <div class="caption">
+                <h2>Bedroom 2</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/35rBHLCC/431073d6ee63603542c5502f22f00355-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 3">
+            <div class="caption">
+                <h2Bedroom 3</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/Jws35bbK/880dbd43e84af85dc46cd99aed544b08-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 1">
+            <div class="caption">
+                <h2>Bathroom 1</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/sJpppRcS/c766426dc0a29a39c2d80a026cf46ecd-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 2">
+            <div class="caption">
+                <h2>Bathroom 2</h2>
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/3mTF0j9R/60271743187aa758cb646430103efe58-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 2">
+            <div class="caption">
+                <h2>Bathroom 2</h2>
             </div>
         </div>
 
     </div>
 
-    <!-- DOTS -->
+    <!-- DOTS NAVIGATION container -->
     <div class="dots" id="dots"></div>
 
 </div>
 
 <script>
-
 /* =========================
-   SELECT ELEMENTS
+   ELEMENT SELECTORS
 ========================= */
-
-const slides = document.getElementById('slides');
-const slide = document.querySelectorAll('.slide');
+const slidesTrack = document.getElementById('slides');
+const allSlides = document.querySelectorAll('.slide');
 const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 const dotsContainer = document.getElementById('dots');
-const slider = document.getElementById('slider');
+const sliderContainer = document.getElementById('slider');
 
-let index = 0;
-let autoSlide;
-
-const totalSlides = slide.length;
+let currentIndex = 0;
+let autoSlideInterval;
+const totalSlidesCount = allSlides.length;
 
 /* =========================
-   CREATE DOTS
+   DYNAMICS DOT GENERATION
 ========================= */
+for(let i = 0; i < totalSlidesCount; i++){
+    const dotElement = document.createElement('div');
+    dotElement.classList.add('dot');
+    if(i === 0) dotElement.classList.add('active');
 
-for(let i = 0; i < totalSlides; i++){
+    dotElement.addEventListener('click', () => {
+        currentIndex = i;
+        updateSliderView();
+        resetAutoSlideTimer();
+    });
+    dotsContainer.appendChild(dotElement);
+}
 
-    const dot = document.createElement('div');
+const allDots = document.querySelectorAll('.dot');
 
-    dot.classList.add('dot');
+/* =========================
+   SLIDER RENDER ENGINE
+========================= */
+function updateSliderView(){
+    // Shift track
+    slidesTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-    if(i === 0){
-        dot.classList.add('active');
-    }
-
-    dot.addEventListener('click', () => {
-
-        index = i;
-
-        updateSlider();
-
-        restartAutoSlide();
+    // Handle structural active state switching
+    allSlides.forEach((slideSlide, idx) => {
+        if(idx === currentIndex) {
+            slideSlide.classList.add('active');
+        } else {
+            slideSlide.classList.remove('active');
+        }
     });
 
-    dotsContainer.appendChild(dot);
-}
-
-const dots = document.querySelectorAll('.dot');
-
-/* =========================
-   UPDATE SLIDER
-========================= */
-
-function updateSlider(){
-
-    slides.style.transform = `translateX(-${index * 100}%)`;
-
-    dots.forEach(dot => dot.classList.remove('active'));
-
-    dots[index].classList.add('active');
+    // Handle navigation dots active states
+    allDots.forEach(dot => dot.classList.remove('active'));
+    allDots[currentIndex].classList.add('active');
 }
 
 /* =========================
-   NEXT SLIDE
+   NAVIGATION FUNCTIONS
 ========================= */
+function loadNextSlide(){
+    currentIndex++;
+    if(currentIndex >= totalSlidesCount) currentIndex = 0;
+    updateSliderView();
+}
 
-function nextSlide(){
-
-    index++;
-
-    if(index >= totalSlides){
-        index = 0;
-    }
-
-    updateSlider();
+function loadPrevSlide(){
+    currentIndex--;
+    if(currentIndex < 0) currentIndex = totalSlidesCount - 1;
+    updateSliderView();
 }
 
 /* =========================
-   PREVIOUS SLIDE
+   EVENT ATTACHMENTS
 ========================= */
-
-function prevSlide(){
-
-    index--;
-
-    if(index < 0){
-        index = totalSlides - 1;
-    }
-
-    updateSlider();
-}
+nextBtn.addEventListener('click', () => { loadNextSlide(); resetAutoSlideTimer(); });
+prevBtn.addEventListener('click', () => { loadPrevSlide(); resetAutoSlideTimer(); });
 
 /* =========================
-   BUTTON EVENTS
+   AUTOMATION MANAGEMENT
 ========================= */
-
-nextBtn.addEventListener('click', () => {
-
-    nextSlide();
-
-    restartAutoSlide();
-});
-
-prevBtn.addEventListener('click', () => {
-
-    prevSlide();
-
-    restartAutoSlide();
-});
-
-/* =========================
-   AUTO SLIDE
-========================= */
-
-function startAutoSlide(){
-
-    autoSlide = setInterval(() => {
-
-        nextSlide();
-
-    }, 10000); // 10 seconds
+function kickstartAutoCycle(){
+    autoSlideInterval = setInterval(loadNextSlide, 8000); // Set to 8s loop for premium pacing
 }
 
-function stopAutoSlide(){
-
-    clearInterval(autoSlide);
+function haltAutoCycle(){
+    clearInterval(autoSlideInterval);
 }
 
-function restartAutoSlide(){
-
-    stopAutoSlide();
-
-    startAutoSlide();
+function resetAutoSlideTimer(){
+    haltAutoCycle();
+    kickstartAutoCycle();
 }
 
-/* Start slider */
-startAutoSlide();
+// Initial script ignition
+kickstartAutoCycle();
 
 /* =========================
-   PAUSE ON HOVER
+   INTERACTION PAUSE HOOKS
 ========================= */
-
-slider.addEventListener('mouseenter', () => {
-
-    stopAutoSlide();
-});
-
-slider.addEventListener('mouseleave', () => {
-
-    startAutoSlide();
-});
+sliderContainer.addEventListener('mouseenter', haltAutoCycle);
+sliderContainer.addEventListener('mouseleave', kickstartAutoCycle);
 
 /* =========================
-   TOUCH SUPPORT
+   MOBILE TOUCH INTEGRATION
 ========================= */
+let startPointX = 0;
+let endPointX = 0;
 
-let touchStartX = 0;
-let touchEndX = 0;
+sliderContainer.addEventListener('touchstart', event => {
+    startPointX = event.changedTouches[0].screenX;
+    haltAutoCycle();
+}, {passive: true});
 
-slider.addEventListener('touchstart', e => {
+sliderContainer.addEventListener('touchend', event => {
+    endPointX = event.changedTouches[0].screenX;
+    processSwipeMetrics();
+    kickstartAutoCycle();
+}, {passive: true});
 
-    touchStartX = e.changedTouches[0].screenX;
-
-    stopAutoSlide();
-});
-
-slider.addEventListener('touchend', e => {
-
-    touchEndX = e.changedTouches[0].screenX;
-
-    handleSwipe();
-
-    startAutoSlide();
-});
-
-/* =========================
-   HANDLE SWIPE
-========================= */
-
-function handleSwipe(){
-
-    if(touchStartX - touchEndX > 50){
-
-        nextSlide();
-    }
-
-    if(touchEndX - touchStartX > 50){
-
-        prevSlide();
-    }
+function processSwipeMetrics(){
+    const thresholdOffset = 60;
+    if(startPointX - endPointX > thresholdOffset) loadNextSlide();
+    if(endPointX - startPointX > thresholdOffset) loadPrevSlide();
 }
-
 </script>
 
 </body>
