@@ -98,11 +98,22 @@ html, body{
     letter-spacing: -1px;
 }
 
+.caption p {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 400;
+}
+
 /* Stagger animation delays for elements sliding up */
 .slide.active .caption h2 {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.4s;
+}
+
+.slide.active .caption p {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.6s; /* Slighter delay for natural layout build */
 }
 
 /* =========================
@@ -197,7 +208,8 @@ html, body{
         <div class="slide active">
             <img src="https://i.ibb.co/RpWHBJKT/48fa36da56bdb09699c00fa629ccb890-uncropped-scaled-within-1536-1152.webp" alt="Sitting Area 1">
             <div class="caption">
-                <h2>Sitting Area</h2>
+                <h2>Living Room</h2>
+                <p>Total Square Feet: 252</p>
             </div>
         </div>
 
@@ -205,27 +217,33 @@ html, body{
             <img src="https://i.ibb.co/bjb2gJfJ/d873decbc28c5d884799934fc65e354c-uncropped-scaled-within-1536-1152.webp" alt="Sitting Area 2">
             <div class="caption">
                 <h2>Sitting Area</h2>
+                <p>Total Square Feet: 252</p>
+
             </div>
         </div>
 
         <div class="slide">
             <img src="https://i.ibb.co/q3BpVRMT/eeaea64777859fa41530fac5c73f2069-uncropped-scaled-within-1536-1152.webp" alt="Kitchen 1">
             <div class="caption">
-                <h2>Kitchen</h2>
+                <h2>Kitchen & Dinning</h2>
+                <p>Total Square Feet: 216</p>
+
             </div>
         </div>
 
         <div class="slide">
             <img src="https://i.ibb.co/KcGR3hNc/7ae96b897abf0deae6b4384d03aa867c-uncropped-scaled-within-1536-1152.webp" alt="Kitchen 2">
             <div class="caption">
-                <h2>Kitchen</h2>
+                <h2>Kitchen & Dinning</h2>
+                <p>Total Square Feet: 216</p>
             </div>
         </div>
 
         <div class="slide">
             <img src="https://i.ibb.co/7JRwtm1m/908d41a372a2d88a40db844bb87b2a1c-uncropped-scaled-within-1536-1152.webp" alt="Dining Room">
             <div class="caption">
-                <h2>Dining Room</h2>
+                <h2>Kitchen & Dinning</h2>
+                <p>Total Square Feet: 216</p>
             </div>
         </div>
 
@@ -233,6 +251,7 @@ html, body{
             <img src="https://i.ibb.co/xK9rSq3p/0088695293d18e3cb40c1a14dce1cc98-uncropped-scaled-within-1536-1152.webp" alt="Master Bedroom 1">
             <div class="caption">
                 <h2>Master Bed</h2>
+                <p>Total Square Feet: 195</p>
             </div>
         </div>
 
@@ -240,27 +259,33 @@ html, body{
             <img src="https://i.ibb.co/8LsSh43x/4fe0193f9b9c87b937c3ef8ac8ca6894-uncropped-scaled-within-1536-1152.webp" alt="Master Bedroom 2">
             <div class="caption">
                 <h2>Master Bedroom</h2>
+                <p>Total Square Feet: 195</p>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://i.ibb.co/7xr583MM/0f4f2a7922a7035e7b205e16326421c4-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 1">
-            <div class="caption">
-                <h2>Bedroom 1</h2>
-            </div>
-        </div>
-
-        <div class="slide">
-            <img src="https://i.ibb.co/SwF5Wnfk/25d24b7d9e2557ddcab96d79c4752ed1-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 2">
+            <img src="https://i.ibb.co/7xr583MM/0f4f2a7922a7035e7b205e16326421c4-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 2">
             <div class="caption">
                 <h2>Bedroom 2</h2>
+                <p>Total Square Feet: 110</p>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://i.ibb.co/35rBHLCC/431073d6ee63603542c5502f22f00355-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 3">
+            <img src="https://i.ibb.co/SwF5Wnfk/25d24b7d9e2557ddcab96d79c4752ed1-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 3">
             <div class="caption">
-                <h2> Bedroom 3 </h2>
+                <h2>Bedroom 3</h2>
+                <p>Total Square Feet: 100</p>
+
+            </div>
+        </div>
+
+        <div class="slide">
+            <img src="https://i.ibb.co/35rBHLCC/431073d6ee63603542c5502f22f00355-uncropped-scaled-within-1536-1152.webp" alt="Bedroom 4">
+            <div class="caption">
+                <h2>Bedroom 4</h2>
+                <p>Total Square Feet: 100</p>
+
             </div>
         </div>
 
@@ -268,6 +293,8 @@ html, body{
             <img src="https://i.ibb.co/Jws35bbK/880dbd43e84af85dc46cd99aed544b08-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 1">
             <div class="caption">
                 <h2>Bathroom 1</h2>
+                <p>Total Square Feet: 75</p>
+
             </div>
         </div>
 
@@ -275,6 +302,8 @@ html, body{
             <img src="https://i.ibb.co/sJpppRcS/c766426dc0a29a39c2d80a026cf46ecd-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 2">
             <div class="caption">
                 <h2>Bathroom 2</h2>
+                <p>Total Square Feet: 62</p>
+
             </div>
         </div>
 
@@ -282,6 +311,8 @@ html, body{
             <img src="https://i.ibb.co/3mTF0j9R/60271743187aa758cb646430103efe58-uncropped-scaled-within-1536-1152.webp" alt="Bathroom 2">
             <div class="caption">
                 <h2>Bathroom 2</h2>
+                <p>Total Square Feet: 62</p>
+
             </div>
         </div>
 
@@ -308,7 +339,7 @@ let autoSlideInterval;
 const totalSlidesCount = allSlides.length;
 
 /* =========================
-   DYNAMICS DOT GENERATION
+   DYNAMIC DOT GENERATION
 ========================= */
 for(let i = 0; i < totalSlidesCount; i++){
     const dotElement = document.createElement('div');
@@ -343,7 +374,9 @@ function updateSliderView(){
 
     // Handle navigation dots active states
     allDots.forEach(dot => dot.classList.remove('active'));
-    allDots[currentIndex].classList.add('active');
+    if (allDots[currentIndex]) {
+        allDots[currentIndex].classList.add('active');
+    }
 }
 
 /* =========================
@@ -415,6 +448,7 @@ function processSwipeMetrics(){
     if(endPointX - startPointX > thresholdOffset) loadPrevSlide();
 }
 </script>
+
 
 </body>
 </html>
